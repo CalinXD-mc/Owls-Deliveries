@@ -1,0 +1,12 @@
+{
+  "entity.owl.hoot": {
+    "sounds": [
+      "owl_delivery:mob/owl/owl_1",
+      "owl_delivery:mob/owl/owl_2",
+      "owl_delivery:mob/owl/owl_3",
+      "owl_delivery:mob/owl/owl_4",
+      "owl_delivery:mob/owl/owl_5"
+    ],
+    "subtitle": "subtitles.entity.owl.hoot"
+  }
+}

@@ -1,0 +1,37 @@
+{
+	"schemaVersion": 1,
+	"id": "owl_delivery",
+	"version": "${version}",
+	"name": "Owls & Deliveries",
+	"description": "A mod for Minecraft that adds Owls that can deliver Bundles!",
+	"authors": [
+		"CalinXD!"
+	],
+	"contact": {
+		"homepage": "https://fabricmc.net/",
+		"sources": "https://github.com/FabricMC/fabric-example-mod"
+	},
+	"license": "CC0-1.0",
+	"icon": "assets/owl_delivery/icon.png",
+	"environment": "*",
+	"entrypoints": {
+		"main": [
+			"dev.cxd.owl_delivery.OwlsDeliveries"
+		],
+		"client": [
+			"dev.cxd.owl_delivery.OwlsDeliveriesClient"
+		],
+		"fabric-datagen": [
+			"dev.cxd.owl_delivery.OwlsDeliveriesDataGenerator"
+		]
+	},
+	"mixins": [
+		"owl_delivery.mixins.json"
+	],
+	"depends": {
+		"fabricloader": ">=0.18.4",
+		"minecraft": "~1.20.1",
+		"java": ">=17",
+		"fabric-api": "*"
+	}
+}
