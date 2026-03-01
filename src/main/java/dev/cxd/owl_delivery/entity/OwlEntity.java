@@ -205,6 +205,15 @@ public class OwlEntity extends TameableEntity implements Angerable {
         return super.interactMob(player, hand);
     }
 
+    @Override
+    protected void dropLoot(DamageSource source, boolean causedByPlayer) {
+        super.dropLoot(source, causedByPlayer);
+        if (!this.carriedBundle.isEmpty()) {
+            this.dropStack(this.carriedBundle);
+            this.carriedBundle = ItemStack.EMPTY;
+        }
+    }
+
     public void setCarriedBundle(ItemStack stack) { this.carriedBundle = stack; }
     public ItemStack getCarriedBundle() { return this.carriedBundle; }
     public boolean hasCarriedBundle() { return !this.carriedBundle.isEmpty(); }
