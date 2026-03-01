@@ -152,40 +152,45 @@ public class OwlEntity extends TameableEntity implements Angerable {
     public ActionResult interactMob(PlayerEntity player, Hand hand) {
         ItemStack stack = player.getStackInHand(hand);
 
-        if (this.isTamed() && this.isOwner(player)) {
-            if (stack.isOf(Items.RABBIT_FOOT) && this.getHealth() == this.getMaxHealth()) {
-                return super.interactMob(player, hand);
-            }
-
+        if (!this.isTamed() && stack.isOf(Items.RABBIT)) {
+            this.eat(player, hand, stack);
             if (!this.getWorld().isClient) {
-                this.setSitting(!this.isSitting());
-                this.navigation.stop();
-                this.setTarget(null);
+                if (this.random.nextInt(5) == 0) {
+                    this.setOwner(player);
+                    this.setSitting(true);
+                    this.getWorld().sendEntityStatus(this, (byte) 7);
+                } else {
+                    this.getWorld().sendEntityStatus(this, (byte) 6);
+                }
             }
             return ActionResult.SUCCESS;
         }
 
-        if (stack.isOf(Items.BUNDLE) && !stack.getName().getString().isEmpty()) {
-            if (this.isTamed() && this.isOwner(player)) {
-                String targetName = stack.getName().getString();
-                MinecraftServer server = this.getServer();
-                if (server != null) {
-                    ServerPlayerEntity target = server.getPlayerManager().getPlayerList().stream()
-                            .filter(p -> p.getName().getString().equalsIgnoreCase(targetName))
-                            .findFirst().orElse(null);
-
-                    if (target != null) {
-                        this.setReceiverUuid(target.getUuid());
-                        this.setCarriedBundle(stack.copy());
-                        stack.decrement(1);
-                        this.setSitting(false);
-                        return ActionResult.SUCCESS;
-                    } else {
-                        player.sendMessage(Text.literal("No player named \"" + targetName + "\" is online."), true);
-                        return ActionResult.FAIL;
-                    }
+        if (this.isTamed() && this.isOwner(player) && stack.isOf(Items.BUNDLE) && !stack.getName().getString().isEmpty()) {
+            String targetName = stack.getName().getString();
+            MinecraftServer server = this.getServer();
+            if (server != null) {
+                ServerPlayerEntity target = server.getPlayerManager().getPlayerList().stream()
+                        .filter(p -> p.getName().getString().equalsIgnoreCase(targetName))
+                        .findFirst().orElse(null);
+                if (target != null) {
+                    this.setReceiverUuid(target.getUuid());
+                    this.setCarriedBundle(stack.copy());
+                    stack.decrement(1);
+                    this.setSitting(false);
+                    return ActionResult.SUCCESS;
+                } else {
+                    player.sendMessage(Text.literal("No player named \"" + targetName + "\" is online."), true);
+                    return ActionResult.FAIL;
                 }
             }
+        }
+
+        if (this.isTamed() && this.isOwner(player) && stack.isOf(Items.RABBIT_FOOT)) {
+            if (!this.getWorld().isClient) {
+                this.setSitting(false);
+            }
+            return super.interactMob(player, hand);
         }
 
         if (this.isTamed() && this.isOwner(player)) {
